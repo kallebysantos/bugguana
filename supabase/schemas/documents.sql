@@ -10,6 +10,7 @@ create table if not exists documents (
 create or replace function private.handle_new_documents_batch()
 returns trigger
 language plpgsql
+security definer
 as $$
   declare
     result bigint;

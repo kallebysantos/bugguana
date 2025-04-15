@@ -4,18 +4,14 @@ import { getDatabase } from "@shared/supabase/service.ts";
 
 import { processMarkdown } from "./markdown_parser.ts";
 
-console.log("Worker start");
 const db = getDatabase({ serviceRole: true });
 if (typeof db === "string") throw new Error(db);
 
-console.log("Worker start");
-
 EdgeWorker.start(async (payload: { id: string }) => {
-  console.log("Worker run", payload);
-
-  const { data: document, error: fetchDocumentError } = await db.from(
-    "documents",
-  )
+  const {
+    data: document,
+    error: fetchDocumentError,
+  } = await db.from("documents")
     .select("content")
     .eq("id", payload.id)
     .single();
