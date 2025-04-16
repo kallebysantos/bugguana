@@ -36,7 +36,7 @@ EdgeWorker.start(async (payload: { id: string }) => {
     );
   }
 
-  const embeddings = await embedder("hello world", {
+  const embeddings = await embedder(section.content, {
     pooling: "mean",
     normalize: true,
   });
