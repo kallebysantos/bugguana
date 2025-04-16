@@ -1,5 +1,6 @@
 {
   "imports": {
-    "@shared/": "./_shared/"
+    "@shared/": "./_shared/",
+    "@huggingface/transformers.js": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.4.2"
   }
 }

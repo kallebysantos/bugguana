@@ -34,7 +34,31 @@ export type Database = {
   }
   public: {
     Tables: {
-      document_sections: {
+      documents: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      documents_sections: {
         Row: {
           content: string
           created_at: string
@@ -61,37 +85,13 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "document_sections_document_id_fkey"
+            foreignKeyName: "documents_sections_document_id_fkey"
             columns: ["document_id"]
             isOneToOne: false
             referencedRelation: "documents"
             referencedColumns: ["id"]
           },
         ]
-      }
-      documents: {
-        Row: {
-          content: string
-          created_at: string
-          id: string
-          title: string
-          updated_at: string | null
-        }
-        Insert: {
-          content: string
-          created_at?: string
-          id?: string
-          title: string
-          updated_at?: string | null
-        }
-        Update: {
-          content?: string
-          created_at?: string
-          id?: string
-          title?: string
-          updated_at?: string | null
-        }
-        Relationships: []
       }
     }
     Views: {

@@ -8,6 +8,8 @@ const db = getDatabase({ serviceRole: true });
 if (typeof db === "string") throw new Error(db);
 
 EdgeWorker.start(async (payload: { id: string }) => {
+  console.log("processing document", payload.id);
+
   const {
     data: document,
     error: fetchDocumentError,
@@ -15,8 +17,6 @@ EdgeWorker.start(async (payload: { id: string }) => {
     .select("content")
     .eq("id", payload.id)
     .single();
-
-  console.log(document);
 
   if (fetchDocumentError || !document) {
     throw new Error(
@@ -30,7 +30,7 @@ EdgeWorker.start(async (payload: { id: string }) => {
     document_id: payload.id,
   }));
 
-  const { error } = await db.from("document_sections").insert(sections);
+  const { error } = await db.from("documents_sections").insert(sections);
   if (error) {
     throw new Error(
       error.message ||
