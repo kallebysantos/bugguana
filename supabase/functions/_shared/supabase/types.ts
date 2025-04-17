@@ -34,64 +34,47 @@ export type Database = {
   }
   public: {
     Tables: {
-      documents: {
+      issues: {
         Row: {
+          category: string | null
           content: string
           created_at: string
+          embeddings: unknown | null
           id: string
+          kind: string | null
+          status: string
+          summary: string | null
+          tag: string | null
           title: string
           updated_at: string | null
         }
         Insert: {
+          category?: string | null
           content: string
           created_at?: string
+          embeddings?: unknown | null
           id?: string
+          kind?: string | null
+          status?: string
+          summary?: string | null
+          tag?: string | null
           title: string
           updated_at?: string | null
         }
         Update: {
+          category?: string | null
           content?: string
           created_at?: string
+          embeddings?: unknown | null
           id?: string
+          kind?: string | null
+          status?: string
+          summary?: string | null
+          tag?: string | null
           title?: string
           updated_at?: string | null
         }
         Relationships: []
-      }
-      documents_sections: {
-        Row: {
-          content: string
-          created_at: string
-          document_id: string
-          embeddings: unknown | null
-          id: string
-          updated_at: string | null
-        }
-        Insert: {
-          content: string
-          created_at?: string
-          document_id: string
-          embeddings?: unknown | null
-          id?: string
-          updated_at?: string | null
-        }
-        Update: {
-          content?: string
-          created_at?: string
-          document_id?: string
-          embeddings?: unknown | null
-          id?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "documents_sections_document_id_fkey"
-            columns: ["document_id"]
-            isOneToOne: false
-            referencedRelation: "documents"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {

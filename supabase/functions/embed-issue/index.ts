@@ -18,30 +18,30 @@ const embedder = await pipeline("feature-extraction", "supabase/gte-small", {
 });
 
 EdgeWorker.start(async (payload: { id: string }) => {
-  console.time("Task time");
-
   const {
-    data: section,
+    data: issue,
     error: fetchSectionError,
-  } = await db.from("documents_sections")
-    .select("content")
+  } = await db.from("issues")
+    .select("summary")
     .eq("id", payload.id)
     .single();
 
-  if (fetchSectionError || !section) {
-    console.error("ERROR FETCH", fetchSectionError);
+  if (fetchSectionError || !issue) {
+    console.error("error", fetchSectionError);
 
     throw new Error(
       fetchSectionError.message || FetchSectionError(payload.id),
     );
   }
 
-  const embeddings = await embedder(section.content, {
+  console.time("embedding time");
+  const embeddings = await embedder(issue.summary, {
     pooling: "mean",
     normalize: true,
   });
+  console.timeEnd("embedding time");
 
-  const { error: saveEmbeddingsError } = await db.from("documents_sections")
+  const { error: saveEmbeddingsError } = await db.from("issues")
     .update({
       embeddings: JSON.stringify(embeddings.tolist().at(0)),
       updated_at: new Date().toISOString(),
@@ -57,13 +57,12 @@ EdgeWorker.start(async (payload: { id: string }) => {
   }
 
   console.log(
-    "processed document_section",
+    "processed issue embeddings",
     payload.id,
     embeddings.tolist().at(0).length,
   );
-  console.timeEnd("Task time");
 }, {
-  queueName: "documents_sections",
+  queueName: "embed-issue",
   maxConcurrent: 1,
   maxPgConnections: 1,
 });
