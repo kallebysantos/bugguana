@@ -40,3 +40,12 @@ after insert on documents
 referencing new table as new_table
   for each statement
   execute function private.handle_new_documents_batch();
+
+-- ping edge worker at every minute
+select cron.schedule(
+  'ping_handle_documents_worker',
+  '30 seconds',
+  $$
+    select edge_worker.spawn('handle-documents')
+  $$
+);
