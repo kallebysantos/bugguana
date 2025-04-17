@@ -24,7 +24,7 @@ EdgeWorker.start(async (payload: { id: string }) => {
     );
   }
 
-  const markdown = processMarkdown(document.content);
+  const markdown = processMarkdown(document.content, 512);
   const sections = markdown.sections.map(({ content }) => ({
     content,
     document_id: payload.id,
