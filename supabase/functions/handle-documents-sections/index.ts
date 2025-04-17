@@ -18,7 +18,7 @@ const embedder = await pipeline("feature-extraction", "supabase/gte-small", {
 });
 
 EdgeWorker.start(async (payload: { id: string }) => {
-  console.log("processing document_section", payload.id);
+  console.time("Task time");
 
   const {
     data: section,
@@ -60,6 +60,7 @@ EdgeWorker.start(async (payload: { id: string }) => {
     payload.id,
     embeddings.tolist().at(0).length,
   );
+  console.timeEnd("Task time");
 }, {
   queueName: "documents_sections",
   maxConcurrent: 1,
