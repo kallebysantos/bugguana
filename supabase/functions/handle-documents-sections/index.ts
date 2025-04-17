@@ -44,6 +44,7 @@ EdgeWorker.start(async (payload: { id: string }) => {
   const { error: saveEmbeddingsError } = await db.from("documents_sections")
     .update({
       embeddings: JSON.stringify(embeddings.tolist().at(0)),
+      updated_at: new Date().toISOString(),
     })
     .eq("id", payload.id);
 
