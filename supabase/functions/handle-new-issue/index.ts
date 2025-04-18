@@ -1,12 +1,13 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { EdgeWorker } from "jsr:@pgflow/edge-worker@0.0.4";
 import { getDatabase } from "@shared/supabase/service.ts";
+import { SummarizationError, summarize } from "./summarizer.ts";
 
 const db = getDatabase({ serviceRole: true });
 if (typeof db === "string") throw new Error(db);
 
 EdgeWorker.start(async (payload: { id: string }) => {
-  console.log("processing issue", payload.id);
+  console.info("processing issue", payload.id);
 
   const {
     data: issue,
@@ -24,10 +25,15 @@ EdgeWorker.start(async (payload: { id: string }) => {
   }
 
   /* AI SUMMARY */
+  const summary = await summarize({ ...issue });
+  if (!summary) {
+    console.error(SummarizationError);
+    throw new Error(SummarizationError);
+  }
 
   const { error: updateIssueError } = await db.from("issues")
     .update({
-      summary: "hello world",
+      summary,
       updated_at: new Date().toISOString(),
     })
     .eq("id", payload.id);
