@@ -17,19 +17,13 @@ AS $function$
   declare
     result bigint;
 begin
-  perform pgmq.create('issues')
-  where not exists (
-    select 1 from pgmq.list_queues() where queue_name = 'issues'
-  );
-
-  with aggregated as (
-    select array_agg(jsonb_build_object('id', n.id)) as msgs
+  with value as (
+    select jsonb_build_object('id', n.id) as id
     from new_table n
   ),
   send as (
-    select pgmq.send_batch('issues', msgs)
-    from aggregated
-    where msgs is not null
+    select pgflow.start_flow('flow_apply_ai_processing', id)
+    from value
   )
   select count(*) from send into result;
 
@@ -38,35 +32,11 @@ end;
 $function$
 ;
 
-select cron.schedule('ping_new_issue_worker', '30 seconds',
+-- diff will not apply non-schema changes
+-- ping edge worker at every 30s
+select cron.schedule('ping_flow_apply_ai_processing_worker', '30 seconds',
   $$
-    select edge_worker.spawn('handle-new-issue')
-  $$
-);
-
-CREATE OR REPLACE FUNCTION private.handle_on_summary_apply_embed_batch()
- RETURNS trigger
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $function$
-  declare
-    result bigint;
-begin
-  perform pgmq.create('embed-issue')
-  where not exists (
-    select 1 from pgmq.list_queues() where queue_name = 'embed-issue'
-  );
-
-  perform pgmq.send('embed-issue', jsonb_build_object('id', new.id));
-
-  return new;
-end;
-$function$
-;
-
-select cron.schedule('ping_embed_issue_worker', '30 seconds',
-  $$
-    select edge_worker.spawn('embed-issue')
+    select edge_worker.spawn('flow-apply-ai-processing')
   $$
 );
 
@@ -149,8 +119,6 @@ grant truncate on table "public"."issues" to "service_role";
 
 grant update on table "public"."issues" to "service_role";
 
-CREATE TRIGGER on_new_issues AFTER INSERT ON public.issues REFERENCING NEW TABLE AS new_table FOR EACH STATEMENT EXECUTE FUNCTION private.handle_new_issues_batch();
-
-CREATE TRIGGER on_summary_apply_embed AFTER INSERT OR UPDATE OF summary ON public.issues FOR EACH ROW WHEN ((new.summary IS NOT NULL)) EXECUTE FUNCTION private.handle_on_summary_apply_embed_batch();
+CREATE TRIGGER on_new_issues AFTER INSERT ON public.issues REFERENCING NEW TABLE AS new_table FOR EACH ROW EXECUTE FUNCTION private.handle_new_issues_batch();
 
 
