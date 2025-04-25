@@ -1,4 +1,4 @@
-import { Flow } from "npm:@pgflow/dsl@0.1.12";
+import { Flow } from "npm:@pgflow/dsl@0.1.18";
 import { summary } from "./steps/summary.ts";
 import { embed } from "./steps/embed.ts";
 import { getCategory } from "./steps/get_category.ts";
@@ -10,7 +10,7 @@ type Input = {
 };
 
 export const ApplyAIProcessing = new Flow<Input>({
-  slug: "issue_apply_ai_processing",
+  slug: "flow_apply_ai_processing",
   maxAttempts: 3,
 })
   .step({ slug: "summary" }, async ({ run: payload }) => {

@@ -1,5 +1,5 @@
+import { classify } from "@shared/ai/classifier.ts";
 import { getDatabase } from "@shared/supabase/service.ts";
-import { classifier } from "@shared/ai/classifier.ts";
 
 const db = getDatabase({ serviceRole: true });
 if (typeof db === "string") throw new Error(db);
@@ -11,24 +11,15 @@ export type GetCategoryInput = {
   summaryContent: string;
 };
 
-const categories = {
-  "Database": "database",
-  "Security": "security",
-  "File Storage": "storage",
-  "Realtime Communication": "realtime",
-  "Infrastrucure": "infrastructure",
-};
-
 export async function getKind(
   payload: GetCategoryInput,
-): Promise<keyof typeof categories> {
-  console.time("kind time");
-  const predicts = await classifier(payload.summaryContent, [
-    "issue",
-    "help wanted",
-  ]);
+) {
+  const predicts = await classify({
+    text: payload.summaryContent,
+    labels: ["issue", "help wanted"],
+  });
+
   const kind = predicts.labels[0];
-  console.timeEnd("kind time");
 
   const { error: saveKindError } = await db.from("issues")
     .update({
@@ -51,7 +42,7 @@ export async function getKind(
     kind,
   );
 
-  return kind;
+  return predicts;
 }
 
 export const SaveKindError = (id: string) =>

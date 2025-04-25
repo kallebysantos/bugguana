@@ -2,57 +2,41 @@
   "version": "4",
   "specifiers": {
     "jsr:@henrygd/queue@^1.0.7": "1.0.7",
-    "jsr:@pgflow/edge-worker@0.1.18": "0.1.18",
-    "npm:@pgflow/core@0.1.18": "0.1.18",
-    "npm:@pgflow/dsl@0.1.1": "0.1.1",
-    "npm:@pgflow/dsl@0.1.11": "0.1.11",
+    "jsr:@pgflow/edge-worker@0.1.14-alpha.0": "0.1.14-alpha.0",
+    "npm:@pgflow/core@0.1.14": "0.1.14",
     "npm:@pgflow/dsl@0.1.12": "0.1.12",
-    "npm:@pgflow/dsl@0.1.18": "0.1.18",
-    "npm:@pgflow/dsl@0.1.6": "0.1.6",
-    "npm:@pgflow/dsl@0.1.8": "0.1.8",
+    "npm:@pgflow/dsl@0.1.14": "0.1.14",
     "npm:@types/node@*": "22.12.0",
-    "npm:openai@^4.52.5": "4.95.1",
+    "npm:openai@^4.52.5": "4.96.0",
     "npm:postgres@3.4.5": "3.4.5"
   },
   "jsr": {
     "@henrygd/queue@1.0.7": {
       "integrity": "98cade132744bb420957c5413393f76eb8ba7261826f026c8a89a562b8fa2961"
     },
-    "@pgflow/edge-worker@0.1.18": {
-      "integrity": "117967e1bc28deac9653a9ebe25e6a924e415134edca9335a2c96ee3ca9e9fec",
+    "@pgflow/edge-worker@0.1.14-alpha.0": {
+      "integrity": "0d303eb2949b9d7ace20b677ea9a4036339664647a74515fc4ccdc9af90df8e1",
       "dependencies": [
         "jsr:@henrygd/queue",
         "npm:@pgflow/core",
-        "npm:@pgflow/dsl@0.1.18",
+        "npm:@pgflow/dsl@0.1.14",
         "npm:postgres"
       ]
     }
   },
   "npm": {
-    "@pgflow/core@0.1.18": {
-      "integrity": "sha512-kWcEV+XdGfYga14O3X6tBPRxcgy8Ghzv0z6nDBh3d/Z+X12qZ2ZktkiKDwas5oKpclD4iZpJgHsYLN0VXyc2Ng==",
+    "@pgflow/core@0.1.14": {
+      "integrity": "sha512-m3ywJH/hVYQWy1GSnGQieKVesBaXqJNg/xy7DWZFMh8M2QOmPUdTfP/OdnhOJQ1oHM4CS6hjdxk9mOYFZU7zKA==",
       "dependencies": [
-        "@pgflow/dsl@0.1.18",
+        "@pgflow/dsl@0.1.14",
         "postgres"
       ]
-    },
-    "@pgflow/dsl@0.1.1": {
-      "integrity": "sha512-xNBcnmFUmjf5mwWLJCykLc/PWidaIu3/XSfIav/hi/pVHSnLhjUf8VOYuDeCgNeGf6w+zVzqfl+qMErRGC7mCQ=="
-    },
-    "@pgflow/dsl@0.1.11": {
-      "integrity": "sha512-PT7i2uq9DRDVVP8Obc8keh0EUbdofzddADyixvOuqVdrzqZCqsMP/slYNzW/nR4SYzJJlA61jRgEJ0dbNnuOhg=="
     },
     "@pgflow/dsl@0.1.12": {
       "integrity": "sha512-7egfhl8N/W+8n7Sn9Nnhiq64zC03p8H4WyKlY12/0oWvoBJgY67w8RFT2mx9msqvgZw1WhlhaBYu87QEByvzkQ=="
     },
-    "@pgflow/dsl@0.1.18": {
-      "integrity": "sha512-pcXTam4yuzcyMlJPlgS2F4tmK6Mm2Rl5G8tFawL7kgXNjktTb69aWYdMYDR/XNWU6f45jH1bJNjkKdLKxv9t1Q=="
-    },
-    "@pgflow/dsl@0.1.6": {
-      "integrity": "sha512-oEsugyG9ew/365fEDY1x7mkjWRyq/Zz0oT0KYgsjdp8Qboh4oW1iBFp6AMYewuzwpcNj9w17YO4U6L5EyqWaIA=="
-    },
-    "@pgflow/dsl@0.1.8": {
-      "integrity": "sha512-nX/o7C3qh20d8+lPjff0RNegHcKGTEKDRiolbeaNAsX99+M6qeSTralBzsyT/rqK4dJKpLum1qGL6o56YhgIHQ=="
+    "@pgflow/dsl@0.1.14": {
+      "integrity": "sha512-IBYgAocfyznhPTWdWGPkvJonMrzf7qsUaSaSAdy2IXU69WFGLv3WG+hek6QVB26nu9YQFhsQ5e/nmQW/KYtaHw=="
     },
     "@types/node-fetch@2.6.12": {
       "integrity": "sha512-8nneRWKCg3rMtF69nLQJnOYUcbafYeFSjqkw3jCRLsqkWFlHaoQrr5mXmofFGOx3DKn7UfmBMyov8ySvLRVldA==",
@@ -228,8 +212,8 @@
         "whatwg-url"
       ]
     },
-    "openai@4.95.1": {
-      "integrity": "sha512-IqJy+ymeW+k/Wq+2YVN3693OQMMcODRtHEYOlz263MdUwnN/Dwdl9c2EXSxLLtGEHkSHAfvzpDMHI5MaWJKXjQ==",
+    "openai@4.96.0": {
+      "integrity": "sha512-dKoW56i02Prv2XQolJ9Rl9Svqubqkzg3QpwEOBuSVZLk05Shelu7s+ErRTwFc1Bs3JZ2qBqBfVpXQiJhwOGG8A==",
       "dependencies": [
         "@types/node-fetch",
         "@types/node@18.19.86",
@@ -265,5 +249,8 @@
         "webidl-conversions"
       ]
     }
+  },
+  "remote": {
+    "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.4.2": "0999ad5640ad9fa6cbe480abed8c273bcf2d3ac872a71d2c4b09e2c52c895514"
   }
 }

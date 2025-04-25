@@ -1,5 +1,5 @@
 import { getDatabase } from "@shared/supabase/service.ts";
-import { embedder } from "@shared/ai/embedder.ts";
+import { embed as doEmbed } from "@shared/ai/embedder.ts";
 
 const db = getDatabase({ serviceRole: true });
 if (typeof db === "string") throw new Error(db);
@@ -11,18 +11,14 @@ export type EmbedInput = {
   summaryContent: string;
 };
 
-export async function embed(payload: EmbedInput): Promise<number[]> {
+export async function embed(payload: EmbedInput) {
   console.time("embedding time");
-  const predicts = await embedder(payload.summaryContent, {
-    pooling: "mean",
-    normalize: true,
-  });
-  const embeddings = predicts.tolist().at(0);
+  const embeddings = await doEmbed({ text: payload.summaryContent });
   console.timeEnd("embedding time");
 
   const { error: saveEmbeddingsError } = await db.from("issues")
     .update({
-      embeddings: JSON.stringify(embeddings),
+      embeddings: JSON.stringify(embeddings.data),
       updated_at: new Date().toISOString(),
     })
     .eq("id", payload.id);

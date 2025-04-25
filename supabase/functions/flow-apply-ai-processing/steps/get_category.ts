@@ -1,5 +1,5 @@
 import { getDatabase } from "@shared/supabase/service.ts";
-import { classifier } from "@shared/ai/classifier.ts";
+import { classify } from "@shared/ai/classifier.ts";
 
 const db = getDatabase({ serviceRole: true });
 if (typeof db === "string") throw new Error(db);
@@ -21,15 +21,13 @@ const categories = {
 
 export async function getCategory(
   payload: GetCategoryInput,
-): Promise<keyof typeof categories> {
-  console.time("category time");
-  const predicts = await classifier(
-    payload.summaryContent,
-    Object.keys(categories),
-  );
+) {
+  const predicts = await classify({
+    text: payload.summaryContent,
+    labels: Object.keys(categories),
+  });
   // @ts-ignore: safety cause we did used 'Object.keys' as label input
   const category: keyof typeof categories = predicts.labels[0];
-  console.timeEnd("category time");
 
   const { error: saveCategoryError } = await db.from("issues")
     .update({
@@ -52,7 +50,7 @@ export async function getCategory(
     category,
   );
 
-  return category;
+  return predicts;
 }
 
 export const SaveCategoryError = (id: string) =>
