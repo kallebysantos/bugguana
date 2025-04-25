@@ -1,12 +1,9 @@
 import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { Database } from "./types.ts";
-
-// These are automatically injected
-const supabaseUrl = Deno.env.get("SUPABASE_URL");
-const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
-const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+import { getConfig } from "./config.ts";
 
 let database: SupabaseClient<Database> | undefined = undefined;
+const config = getConfig();
 
 export type GetDatabaseOptions = {
   authorization?: string;
@@ -17,11 +14,9 @@ export type GetDatavaseResult = SupabaseClient<Database> | string;
 export function getDatabase(
   { authorization, serviceRole }: GetDatabaseOptions,
 ): GetDatavaseResult {
-  if (
-    !supabaseUrl || !supabaseAnonKey || !supabaseServiceKey
-  ) {
-    return MissingConfigError;
-  }
+  if (typeof config === "string") return config;
+
+  const { supabaseUrl, supabaseAnonKey, supabaseServiceKey } = config;
 
   const headers = authorization && ({
     global: {
@@ -46,5 +41,3 @@ export function getDatabase(
 
   return database;
 }
-
-export const MissingConfigError = "Missing 'SUPABASE_*' environment config";

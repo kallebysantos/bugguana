@@ -1,12 +1,15 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { EdgeWorker } from "jsr:@pgflow/edge-worker@0.0.4";
 import { getDatabase } from "@shared/supabase/service.ts";
-import { SummarizationError, summarize } from "./summarizer.ts";
+import { SummarizationError, summarize } from "@shared/ai/summarizer.ts";
 
 const db = getDatabase({ serviceRole: true });
 if (typeof db === "string") throw new Error(db);
 
-EdgeWorker.start(async (payload: { id: string }) => {
+export type SummaryInput = {
+  /** Represents the issue's ID */
+  id: string;
+};
+
+export async function summary(payload: SummaryInput): Promise<string> {
   console.info("processing issue", payload.id);
 
   const {
@@ -24,7 +27,6 @@ EdgeWorker.start(async (payload: { id: string }) => {
     );
   }
 
-  /* AI SUMMARY */
   const summary = await summarize({ ...issue });
   if (!summary) {
     console.error(SummarizationError);
@@ -42,9 +44,9 @@ EdgeWorker.start(async (payload: { id: string }) => {
     console.error(updateIssueError);
     throw new Error(updateIssueError.message);
   }
-}, {
-  queueName: "issues",
-});
+
+  return summary;
+}
 
 export const LoadIssueError = (id: string) =>
   `could not load issue with id: [${id}]`;
