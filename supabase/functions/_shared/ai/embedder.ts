@@ -8,6 +8,7 @@ env.allowLocalModels = false;
 
 const config = getConfig();
 
+// We do not await here for lazy loading
 export const embedder = pipeline(
   "feature-extraction",
   "Supabase/gte-small",
