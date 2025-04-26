@@ -24,7 +24,7 @@ export type AnswererInput = {
 
 export type AnswererOutput = {
   answer: string;
-  score: string;
+  score: number;
 };
 
 /** Uses an external EdgeFunction endpoint to perform inference */

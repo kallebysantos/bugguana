@@ -3,6 +3,7 @@ import { summary } from "./steps/summary.ts";
 import { embed } from "./steps/embed.ts";
 import { getCategory } from "./steps/get_category.ts";
 import { getKind } from "./steps/get_kind.ts";
+import { getTag } from "./steps/get_tag.ts";
 
 type Input = {
   /** Represents the issue's ID */
@@ -32,6 +33,12 @@ export const ApplyAIProcessing = new Flow<Input>({
     { slug: "get_kind", dependsOn: ["summary"] },
     async ({ run: { id }, summary }) => {
       return await getKind({ id, summaryContent: summary });
+    },
+  )
+  .step(
+    { slug: "get_tag", dependsOn: ["summary"] },
+    async ({ run: { id }, summary }) => {
+      return await getTag({ id, summaryContent: summary });
     },
   );
 

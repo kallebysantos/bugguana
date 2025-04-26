@@ -30,8 +30,10 @@ export const applyTemplate = ({ title, content }: SummarizerPayload) =>
   `ISSUE: ${title}\n${content}`;
 
 const CLEAN_UP_PREFIXES = [
+  "**Issue Summary:**",
   "Here is a concise summary of the user's issue:",
   "Here's a concise summary of the user's issue:",
+  "Here's a concise summary of the issue:",
   "Here's a summary of the user's issue:",
 ];
 
