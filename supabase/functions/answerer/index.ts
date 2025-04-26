@@ -1,7 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { AnswererInput } from "@shared/ai/answerer.ts";
 
-// Lazy Loading the classifier instance
+// Lazy Loading the answerer instance
 const answerer = await (await import("@shared/ai/answerer.ts")).answerer;
 
 Deno.serve(async (req) => {

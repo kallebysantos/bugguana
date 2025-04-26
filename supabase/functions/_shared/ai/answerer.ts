@@ -33,7 +33,7 @@ export async function answer(payload: AnswererInput) {
 
   const { supabaseUrl, supabaseAnonKey } = config;
 
-  const classification = await fetch(`${supabaseUrl}/functions/v1/answerer`, {
+  const answered = await fetch(`${supabaseUrl}/functions/v1/answerer`, {
     method: "POST",
     body: JSON.stringify(payload),
     headers: {
@@ -42,7 +42,7 @@ export async function answer(payload: AnswererInput) {
     },
   });
 
-  const { data } = await classification.json();
+  const { data } = await answered.json();
 
   return data as AnswererOutput;
 }
